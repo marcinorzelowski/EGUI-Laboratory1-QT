@@ -58,15 +58,17 @@ void SingleDay::on_closeButton_clicked()
 
 void SingleDay::on_deleteSelectedButton_clicked()
 {
+    if(ui->tableView->selectionModel()->selectedIndexes().empty())
+        return; //return if no selection
     QModelIndexList indexes = ui->tableView->selectionModel()->selection().indexes();
     proxyModel->removeRow(indexes[0].row());
     updateData();
-
 }
 
 void SingleDay::on_editSelectedButton_clicked()
 {
-
+    if(ui->tableView->selectionModel()->selectedIndexes().empty())
+        return; //return if no selection
     QModelIndexList indexes = ui->tableView->selectionModel()->selection().indexes();
     QModelIndex index = proxyModel->mapToSource(indexes[0]);
 

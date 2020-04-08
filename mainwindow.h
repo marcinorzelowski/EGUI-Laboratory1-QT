@@ -25,7 +25,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-
+    void saveToFile();
     void loadDataToTableModel(QStandardItemModel *model);
     void setDateBackgroundToCyan(QDate *date);
     QStringList getDataList();

@@ -23,10 +23,13 @@ MainWindow::MainWindow(QWidget *parent)
     model->setHeaderData(1,Qt::Horizontal,tr("Time"));
     model->setHeaderData(2,Qt::Horizontal,tr("Description"));
     ui->calendarWidget->showToday();
+    setBackgroundColor();
 }
 
 MainWindow::~MainWindow()
 {
+    saveToFile();
+
     delete ui;
 }
 
@@ -52,6 +55,27 @@ void MainWindow::setBackgroundColor()
     }
 }
 
+void MainWindow::saveToFile()
+{
+    QFile file("data.txt");
+    if(file.open(QIODevice::WriteOnly | QIODevice::Text)){
+        QTextStream out(&file);
+        file.resize(0);//delete all data from file.
+        for(int row = 0; row < model->rowCount(); row++){
+            for(int col = 0; col < 3; col++){
+                QModelIndex index = model -> index(row, col, QModelIndex());
+                out<<model->data(index).toString().trimmed();
+                if(col!=2)
+                    out<<", ";
+                else if(row!=model->rowCount()-1) // get rid of new line at the end.
+                    out<<"\n";
+                }
+            }
+    }else{
+        qDebug() << "File not exists.";
+    }
+}
+
 void MainWindow::loadDataToTableModel(QStandardItemModel *model)
 {
     QStringList dataList = getDataList();
@@ -63,10 +87,6 @@ void MainWindow::loadDataToTableModel(QStandardItemModel *model)
     for(int row = 0; row < dataList.count(); row++){
         dataColumnsSeparatedList = dataList.at(row).split(",");
         for(int col = 0; col < dataColumnsSeparatedList.count(); col++){
-//            if(col==0){//set background for dates from file.
-//                QDate date = QDate::fromString(dataColumnsSeparatedList.at(0),"dd.MM.yyyy");
-//                setDateBackgroundToCyan(&date);
-//            }
             QModelIndex index = model ->index(row,col,QModelIndex());
             model->setData(index, dataColumnsSeparatedList.at(col));
         }
@@ -85,12 +105,6 @@ void MainWindow::setDateBackgroundToCyan(QDate *date)
 }
 
 
-
-
-
-
-
-
 QStringList MainWindow::getDataList()
 {
     QFile file("data.txt");
@@ -100,7 +114,7 @@ QStringList MainWindow::getDataList()
     rowsOfData.clear();
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qDebug() << "No data";
+        qDebug() << "File not exists.";
         return rowsOfData;
     }
     data = file.readAll();

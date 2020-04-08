@@ -34,7 +34,7 @@ void SingleEvent::on_closeButton_clicked()
 
 void SingleEvent::on_saveButton_clicked()
 {
-    QString timeString = ui->timeEdit->time().toString();
+    QString timeString = ui->timeEdit->time().toString("hh:mm");
     QString description =  ui->descriptionEdit->toPlainText();
     if(isNew){
         QList<QStandardItem *> items;

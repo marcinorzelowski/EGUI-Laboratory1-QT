@@ -1,1 +1,4 @@
-15.04.2020, 00:00, Tajson
+15.04.2020, 15:00, Lunch with Tom
+09.04.2020, 07:05, Wake up
+09.04.2020, 10:00, Morning PE classes
+11.04.2020, 16:00, Family Time
